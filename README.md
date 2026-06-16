@@ -14,7 +14,7 @@ On first use, the app asks for confirmation before restarting Universal Control.
 
 ### Download
 
-Download the latest `UniversalControlRestart-*.zip` from [GitHub Releases](https://github.com/ljzxzxl/universal-control-restarter/releases), unzip it, move `UniversalControlRestart.app` to the Applications folder, then double-click it to run.
+Download the latest `UniversalControlRestart-*.dmg` from [GitHub Releases](https://github.com/ljzxzxl/universal-control-restarter/releases), open it, drag `UniversalControlRestart.app` to the Applications folder, then double-click it to run.
 
 ### What It Does
 
@@ -57,11 +57,11 @@ cp -R build/UniversalControlRestart.app /Applications/
 ./scripts/package.sh
 ```
 
-This creates a zip archive in `dist/` that can be attached to a GitHub Release.
+This creates a DMG archive and SHA256 checksum file in `dist/` that can be attached to a GitHub Release.
 
 ### Gatekeeper Note
 
-Local builds are ad-hoc signed. If you download an unsigned release zip from GitHub, macOS may require right-clicking the app and choosing **Open** the first time. For broad distribution, build with a Developer ID certificate and notarize the zip or DMG.
+Local builds are ad-hoc signed. If you download an unsigned release DMG from GitHub, macOS may require right-clicking the app and choosing **Open** the first time. For broad distribution, build with a Developer ID certificate and notarize the DMG.
 
 ### Troubleshooting Command
 
@@ -88,7 +88,7 @@ Release 版本是 macOS universal build，同时支持 Intel Mac 和 Apple Silic
 
 ### 下载使用
 
-到 [GitHub Releases](https://github.com/ljzxzxl/universal-control-restarter/releases) 下载最新的 `UniversalControlRestart-*.zip`，解压后把 `UniversalControlRestart.app` 拖到“应用程序”中，双击运行即可。
+到 [GitHub Releases](https://github.com/ljzxzxl/universal-control-restarter/releases) 下载最新的 `UniversalControlRestart-*.dmg`，打开后把 `UniversalControlRestart.app` 拖到“应用程序”中，双击运行即可。
 
 第一次打开时，如果 macOS 提示无法验证开发者，可以在 Finder 里右键点击 App，选择 **打开**，再确认一次。后续就可以直接双击运行。
 
@@ -133,11 +133,11 @@ cp -R build/UniversalControlRestart.app /Applications/
 ./scripts/package.sh
 ```
 
-脚本会在 `dist/` 目录生成 zip 文件和对应的 SHA256 校验文件，可以直接上传到 GitHub Release。
+脚本会在 `dist/` 目录生成 DMG 文件和对应的 SHA256 校验文件，可以直接上传到 GitHub Release。
 
 ### Gatekeeper 提示
 
-当前本地构建使用 ad-hoc 签名。公开下载的 zip 如果没有 Developer ID 签名和 notarization，macOS 可能会要求首次通过右键菜单打开。更正式的大范围分发建议使用 Apple Developer ID 签名并完成 notarization。
+当前本地构建使用 ad-hoc 签名。公开下载的 DMG 如果没有 Developer ID 签名和 notarization，macOS 可能会要求首次通过右键菜单打开。更正式的大范围分发建议使用 Apple Developer ID 签名并完成 notarization。
 
 ### 对应命令
 

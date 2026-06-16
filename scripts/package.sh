@@ -4,15 +4,28 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 VERSION="$("${ROOT_DIR}/scripts/read-version.sh")"
 DIST_DIR="${ROOT_DIR}/dist"
+STAGING_DIR="${ROOT_DIR}/build/dmg-staging"
 APP_PATH="${ROOT_DIR}/build/UniversalControlRestart.app"
-ZIP_PATH="${DIST_DIR}/UniversalControlRestart-${VERSION}.zip"
+DMG_PATH="${DIST_DIR}/UniversalControlRestart-${VERSION}.dmg"
 
 "${ROOT_DIR}/scripts/build.sh"
 
-rm -rf "${DIST_DIR}"
-mkdir -p "${DIST_DIR}"
-COPYFILE_DISABLE=1 /usr/bin/ditto -c -k --keepParent --norsrc "${APP_PATH}" "${ZIP_PATH}"
-/usr/bin/shasum -a 256 "${ZIP_PATH}" > "${ZIP_PATH}.sha256"
+rm -rf "${DIST_DIR}" "${STAGING_DIR}"
+mkdir -p "${DIST_DIR}" "${STAGING_DIR}"
+COPYFILE_DISABLE=1 /usr/bin/ditto --norsrc "${APP_PATH}" "${STAGING_DIR}/UniversalControlRestart.app"
+/bin/ln -s /Applications "${STAGING_DIR}/Applications"
 
-echo "Created ${ZIP_PATH}"
-cat "${ZIP_PATH}.sha256"
+COPYFILE_DISABLE=1 /usr/bin/hdiutil create \
+  -volname "UniversalControlRestart" \
+  -srcfolder "${STAGING_DIR}" \
+  -ov \
+  -format UDZO \
+  "${DMG_PATH}"
+
+(
+  cd "${DIST_DIR}"
+  /usr/bin/shasum -a 256 "UniversalControlRestart-${VERSION}.dmg" > "UniversalControlRestart-${VERSION}.dmg.sha256"
+)
+
+echo "Created ${DMG_PATH}"
+cat "${DMG_PATH}.sha256"

@@ -25,8 +25,8 @@ jobs:
         with:
           name: UniversalControlRestart
           path: |
-            dist/UniversalControlRestart-*.zip
-            dist/UniversalControlRestart-*.zip.sha256
+            dist/UniversalControlRestart-*.dmg
+            dist/UniversalControlRestart-*.dmg.sha256
 
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
@@ -40,7 +40,7 @@ jobs:
 
           A tiny macOS utility that restarts Universal Control without rebooting your Mac.
 
-          Download `UniversalControlRestart-*.zip`, unzip it, move `UniversalControlRestart.app` to the Applications folder, then double-click it to run.
+          Download `UniversalControlRestart-*.dmg`, open it, drag `UniversalControlRestart.app` to the Applications folder, then double-click it to run.
 
           This release supports both Intel Macs and Apple Silicon Macs.
 
@@ -50,7 +50,7 @@ jobs:
 
           一个很小的 macOS 工具，用来在不重启整台 Mac 的情况下重启“通用控制”。
 
-          下载 `UniversalControlRestart-*.zip`，解压后把 `UniversalControlRestart.app` 拖到“应用程序”中，双击运行即可。
+          下载 `UniversalControlRestart-*.dmg`，打开后把 `UniversalControlRestart.app` 拖到“应用程序”中，双击运行即可。
 
           此版本同时支持 Intel Mac 和 Apple Silicon Mac。
 
@@ -59,9 +59,9 @@ jobs:
           } > release-notes.md
 
           if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
-            gh release upload "${GITHUB_REF_NAME}" dist/UniversalControlRestart-*.zip dist/UniversalControlRestart-*.zip.sha256 --clobber
+            gh release upload "${GITHUB_REF_NAME}" dist/UniversalControlRestart-*.dmg dist/UniversalControlRestart-*.dmg.sha256 --clobber
           else
-            gh release create "${GITHUB_REF_NAME}" dist/UniversalControlRestart-*.zip dist/UniversalControlRestart-*.zip.sha256 \
+            gh release create "${GITHUB_REF_NAME}" dist/UniversalControlRestart-*.dmg dist/UniversalControlRestart-*.dmg.sha256 \
               --title "UniversalControlRestart ${VERSION}" \
               --notes-file release-notes.md
           fi
