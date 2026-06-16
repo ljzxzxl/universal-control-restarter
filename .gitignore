@@ -1,0 +1,10 @@
+.DS_Store
+build/
+dist/
+*.app/
+*.dmg
+*.zip
+*.icns
+IconBadge
+GenerateIcon
+Resources/icon-preview.png
