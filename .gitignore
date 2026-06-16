@@ -5,6 +5,7 @@ dist/
 *.dmg
 *.zip
 *.icns
+!Resources/UniversalControlRestart.icns
 IconBadge
 GenerateIcon
 Resources/icon-preview.png

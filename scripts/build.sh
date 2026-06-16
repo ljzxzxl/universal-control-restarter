@@ -8,14 +8,13 @@ APP_DIR="${BUILD_DIR}/${APP_NAME}.app"
 CONTENTS_DIR="${APP_DIR}/Contents"
 MACOS_DIR="${CONTENTS_DIR}/MacOS"
 RESOURCES_DIR="${CONTENTS_DIR}/Resources"
-ICONSET_DIR="${BUILD_DIR}/${APP_NAME}.iconset"
-ICON_GENERATOR="${BUILD_DIR}/GenerateIcon"
+ICON_SOURCE="${ROOT_DIR}/Resources/${APP_NAME}.icns"
 SDK_PATH="$(xcrun --sdk macosx --show-sdk-path)"
 DEPLOYMENT_TARGET="12.0"
 ARCHS=(x86_64 arm64)
 
-rm -rf "${APP_DIR}" "${ICONSET_DIR}" "${ICON_GENERATOR}" "${BUILD_DIR}/arch"
-mkdir -p "${MACOS_DIR}" "${RESOURCES_DIR}" "${ICONSET_DIR}"
+rm -rf "${APP_DIR}" "${BUILD_DIR}/arch"
+mkdir -p "${MACOS_DIR}" "${RESOURCES_DIR}"
 
 cp "${ROOT_DIR}/Info.plist" "${CONTENTS_DIR}/Info.plist"
 
@@ -54,10 +53,13 @@ compile_universal_swift() {
 }
 
 compile_universal_swift "${MACOS_DIR}/${APP_NAME}" "${APP_NAME}" "${ROOT_DIR}/Sources/main.swift"
-compile_universal_swift "${ICON_GENERATOR}" "GenerateIcon" "${ROOT_DIR}/Sources/GenerateIcon.swift"
 
-"${ICON_GENERATOR}" "${ICONSET_DIR}"
-iconutil -c icns -o "${RESOURCES_DIR}/${APP_NAME}.icns" "${ICONSET_DIR}"
+if [[ ! -f "${ICON_SOURCE}" ]]; then
+  echo "Missing icon: ${ICON_SOURCE}" >&2
+  exit 1
+fi
+
+cp "${ICON_SOURCE}" "${RESOURCES_DIR}/${APP_NAME}.icns"
 
 chmod +x "${MACOS_DIR}/${APP_NAME}"
 codesign --force --sign - "${APP_DIR}" >/dev/null
