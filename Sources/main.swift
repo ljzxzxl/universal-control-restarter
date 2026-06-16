@@ -152,6 +152,18 @@ final class RestartAppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    private func appendPlainBlock(_ message: String, color: NSColor = NSColor(calibratedWhite: 0.92, alpha: 1)) {
+        let fullMessage = message.hasSuffix("\n") ? message : message + "\n"
+
+        if Thread.isMainThread {
+            appendNow(fullMessage, color: color)
+        } else {
+            DispatchQueue.main.sync {
+                self.appendNow(fullMessage, color: color)
+            }
+        }
+    }
+
     @discardableResult
     private func shell(_ command: String, showCommand: Bool = true, showOutput: Bool = true) -> CommandResult {
         if showCommand {
@@ -232,10 +244,24 @@ final class RestartAppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func finishSuccessfully() {
+        append("")
+        let successArt = [
+            "",
+            "              __",
+            "             / /",
+            "            / /",
+            "       __  / /",
+            "       \\ \\/ /",
+            "        \\__/",
+            "",
+            "        S U C C E S S",
+            ""
+        ].joined(separator: "\n")
+        appendPlainBlock(successArt, color: .systemGreen)
         append(t("完成: UniversalControl 已重启。", "Done: UniversalControl has been restarted."), color: .systemGreen)
-        append(t("窗口将在 2 秒后自动关闭。", "This window will close automatically in 2 seconds."), color: .systemGreen)
+        append(t("窗口将在 3 秒后自动关闭。", "This window will close automatically in 3 seconds."), color: .systemGreen)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
             NSApp.terminate(nil)
         }
     }

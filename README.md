@@ -12,7 +12,7 @@ On first use, the app asks for confirmation before restarting Universal Control.
 
 ### Download
 
-Download the latest `UniversalControlRestart-*.zip` from [GitHub Releases](https://github.com/ljzxzxl/universal-control-restarter/releases), unzip it, and move `UniversalControlRestart.app` to `/Applications`.
+Download the latest `UniversalControlRestart-*.zip` from [GitHub Releases](https://github.com/ljzxzxl/universal-control-restarter/releases), unzip it, move `UniversalControlRestart.app` to the Applications folder, then double-click it to run.
 
 ### What It Does
 
@@ -84,7 +84,7 @@ MIT
 
 ### 下载使用
 
-到 [GitHub Releases](https://github.com/ljzxzxl/universal-control-restarter/releases) 下载最新的 `UniversalControlRestart-*.zip`，解压后把 `UniversalControlRestart.app` 拖到 `/Applications`。
+到 [GitHub Releases](https://github.com/ljzxzxl/universal-control-restarter/releases) 下载最新的 `UniversalControlRestart-*.zip`，解压后把 `UniversalControlRestart.app` 拖到“应用程序”中，双击运行即可。
 
 第一次打开时，如果 macOS 提示无法验证开发者，可以在 Finder 里右键点击 App，选择 **打开**，再确认一次。后续就可以直接双击运行。
 

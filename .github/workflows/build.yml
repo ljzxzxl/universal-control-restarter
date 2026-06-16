@@ -39,7 +39,7 @@ jobs:
 
           A tiny macOS utility that restarts Universal Control without rebooting your Mac.
 
-          Download `UniversalControlRestart-*.zip`, unzip it, and move `UniversalControlRestart.app` to `/Applications`.
+          Download `UniversalControlRestart-*.zip`, unzip it, move `UniversalControlRestart.app` to the Applications folder, then double-click it to run.
 
           The `.sha256` file is included for checksum verification.
 
@@ -47,7 +47,7 @@ jobs:
 
           一个很小的 macOS 工具，用来在不重启整台 Mac 的情况下重启“通用控制”。
 
-          下载 `UniversalControlRestart-*.zip`，解压后把 `UniversalControlRestart.app` 拖到 `/Applications`。
+          下载 `UniversalControlRestart-*.zip`，解压后把 `UniversalControlRestart.app` 拖到“应用程序”中，双击运行即可。
 
           `.sha256` 文件可用于校验下载包。
           EOF
