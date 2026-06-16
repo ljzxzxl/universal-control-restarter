@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: macos-latest
@@ -24,3 +27,27 @@ jobs:
           path: |
             dist/UniversalControlRestart-*.zip
             dist/UniversalControlRestart-*.zip.sha256
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          cat > release-notes.md <<EOF
+          UniversalControlRestart ${VERSION}
+
+          A tiny macOS utility that restarts Universal Control without rebooting your Mac.
+
+          Download `UniversalControlRestart-*.zip`, unzip it, and move `UniversalControlRestart.app` to `/Applications`.
+
+          The `.sha256` file is included for checksum verification.
+          EOF
+
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            gh release upload "${GITHUB_REF_NAME}" dist/UniversalControlRestart-*.zip dist/UniversalControlRestart-*.zip.sha256 --clobber
+          else
+            gh release create "${GITHUB_REF_NAME}" dist/UniversalControlRestart-*.zip dist/UniversalControlRestart-*.zip.sha256 \
+              --title "UniversalControlRestart ${VERSION}" \
+              --notes-file release-notes.md
+          fi
