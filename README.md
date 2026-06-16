@@ -8,6 +8,8 @@ A tiny macOS utility that restarts Universal Control without rebooting your Mac.
 
 Universal Control can occasionally get stuck with the underlying services still alive but the active cross-device session gone. This app does one focused thing: it restarts `/System/Library/CoreServices/UniversalControl.app`, shows the process in a small terminal-style window, and closes itself after a successful restart.
 
+When launched, the app asks for confirmation before restarting Universal Control. After confirmation, it shows each step in a terminal-style window and closes automatically after completion.
+
 ### Download
 
 Download the latest `UniversalControlRestart-*.zip` from [GitHub Releases](https://github.com/ljzxzxl/universal-control-restarter/releases), unzip it, and move `UniversalControlRestart.app` to `/Applications`.
@@ -77,6 +79,8 @@ MIT
 一个很小的 macOS 工具，用来在不重启整台 Mac 的情况下重启“通用控制”。
 
 有时“通用控制”会进入一种尴尬状态：相关系统服务还活着，但跨设备键盘/鼠标会话已经断开。这个 App 只做一件事：重启 `/System/Library/CoreServices/UniversalControl.app`，在一个终端风格的小窗口里显示执行过程，并在重启成功后自动关闭。
+
+启动后，App 会先弹出确认框；用户确认后才会开始重启“通用控制”，并在终端风格窗口里显示每一步执行过程，完成后自动关闭。
 
 ### 下载使用
 

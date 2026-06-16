@@ -42,6 +42,14 @@ jobs:
           Download `UniversalControlRestart-*.zip`, unzip it, and move `UniversalControlRestart.app` to `/Applications`.
 
           The `.sha256` file is included for checksum verification.
+
+          ---
+
+          一个很小的 macOS 工具，用来在不重启整台 Mac 的情况下重启“通用控制”。
+
+          下载 `UniversalControlRestart-*.zip`，解压后把 `UniversalControlRestart.app` 拖到 `/Applications`。
+
+          `.sha256` 文件可用于校验下载包。
           EOF
 
           if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
