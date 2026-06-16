@@ -13,7 +13,9 @@ final class RestartAppDelegate: NSObject, NSApplicationDelegate {
         backing: .buffered,
         defer: false
     )
+    private let scrollView = NSScrollView()
     private let textView = NSTextView()
+    private let confirmationDefaultsKey = "HasConfirmedUniversalControlRestart"
     private let usesChinese = Locale.preferredLanguages.first?
         .lowercased()
         .hasPrefix("zh") ?? false
@@ -27,12 +29,19 @@ final class RestartAppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
 
-        guard confirmRestart() else {
-            NSApp.terminate(nil)
-            return
+        if shouldAskForConfirmation() {
+            guard confirmRestart() else {
+                NSApp.terminate(nil)
+                return
+            }
+            UserDefaults.standard.set(true, forKey: confirmationDefaultsKey)
         }
 
         configureWindow()
+        append(t(
+            "正在准备执行，请稍候...",
+            "Preparing to run. Please wait..."
+        ), color: .systemGreen)
 
         DispatchQueue.global(qos: .userInitiated).async {
             self.runRestart()
@@ -41,6 +50,10 @@ final class RestartAppDelegate: NSObject, NSApplicationDelegate {
 
     private func t(_ zh: String, _ en: String) -> String {
         usesChinese ? zh : en
+    }
+
+    private func shouldAskForConfirmation() -> Bool {
+        !UserDefaults.standard.bool(forKey: confirmationDefaultsKey)
     }
 
     private func confirmRestart() -> Bool {
@@ -67,13 +80,14 @@ final class RestartAppDelegate: NSObject, NSApplicationDelegate {
         window.isReleasedWhenClosed = false
         window.backgroundColor = NSColor(calibratedWhite: 0.06, alpha: 1)
 
-        let scrollView = NSScrollView(frame: window.contentView?.bounds ?? .zero)
+        scrollView.frame = window.contentView?.bounds ?? NSRect(x: 0, y: 0, width: 780, height: 500)
         scrollView.autoresizingMask = [.width, .height]
         scrollView.hasVerticalScroller = true
         scrollView.drawsBackground = true
         scrollView.backgroundColor = NSColor(calibratedWhite: 0.06, alpha: 1)
 
-        textView.minSize = NSSize(width: 0, height: 0)
+        textView.frame = NSRect(origin: .zero, size: scrollView.contentSize)
+        textView.minSize = NSSize(width: 0, height: scrollView.contentSize.height)
         textView.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
         textView.isVerticallyResizable = true
         textView.isHorizontallyResizable = false
@@ -91,6 +105,21 @@ final class RestartAppDelegate: NSObject, NSApplicationDelegate {
         scrollView.documentView = textView
         window.contentView = scrollView
         window.makeKeyAndOrderFront(nil)
+        window.displayIfNeeded()
+    }
+
+    private func resizeTextViewForContent() {
+        guard let textContainer = textView.textContainer, let layoutManager = textView.layoutManager else {
+            return
+        }
+
+        layoutManager.ensureLayout(for: textContainer)
+        let usedRect = layoutManager.usedRect(for: textContainer)
+        let targetHeight = max(
+            scrollView.contentSize.height,
+            ceil(usedRect.height + textView.textContainerInset.height * 2 + 24)
+        )
+        textView.setFrameSize(NSSize(width: scrollView.contentSize.width, height: targetHeight))
     }
 
     private func appendNow(_ fullMessage: String, color: NSColor) {
@@ -99,8 +128,12 @@ final class RestartAppDelegate: NSObject, NSApplicationDelegate {
             .foregroundColor: color
         ]
         textView.textStorage?.append(NSAttributedString(string: fullMessage, attributes: attributes))
+        resizeTextViewForContent()
         textView.scrollToEndOfDocument(nil)
-        window.displayIfNeeded()
+        textView.needsDisplay = true
+        scrollView.needsDisplay = true
+        window.contentView?.layoutSubtreeIfNeeded()
+        window.contentView?.displayIfNeeded()
     }
 
     private func append(_ message: String, color: NSColor = NSColor(calibratedWhite: 0.92, alpha: 1)) {
