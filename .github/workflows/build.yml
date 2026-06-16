@@ -34,12 +34,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          cat > release-notes.md <<EOF
-          UniversalControlRestart ${VERSION}
+          {
+            echo "UniversalControlRestart ${VERSION}"
+            cat <<'EOF'
 
           A tiny macOS utility that restarts Universal Control without rebooting your Mac.
 
           Download `UniversalControlRestart-*.zip`, unzip it, move `UniversalControlRestart.app` to the Applications folder, then double-click it to run.
+
+          This release supports both Intel Macs and Apple Silicon Macs.
 
           The `.sha256` file is included for checksum verification.
 
@@ -49,8 +52,11 @@ jobs:
 
           下载 `UniversalControlRestart-*.zip`，解压后把 `UniversalControlRestart.app` 拖到“应用程序”中，双击运行即可。
 
+          此版本同时支持 Intel Mac 和 Apple Silicon Mac。
+
           `.sha256` 文件可用于校验下载包。
           EOF
+          } > release-notes.md
 
           if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
             gh release upload "${GITHUB_REF_NAME}" dist/UniversalControlRestart-*.zip dist/UniversalControlRestart-*.zip.sha256 --clobber

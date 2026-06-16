@@ -11,7 +11,7 @@ ZIP_PATH="${DIST_DIR}/UniversalControlRestart-${VERSION}.zip"
 
 rm -rf "${DIST_DIR}"
 mkdir -p "${DIST_DIR}"
-/usr/bin/ditto -c -k --keepParent "${APP_PATH}" "${ZIP_PATH}"
+COPYFILE_DISABLE=1 /usr/bin/ditto -c -k --keepParent --norsrc "${APP_PATH}" "${ZIP_PATH}"
 /usr/bin/shasum -a 256 "${ZIP_PATH}" > "${ZIP_PATH}.sha256"
 
 echo "Created ${ZIP_PATH}"
